@@ -1,0 +1,22 @@
+{
+  "day": "2026-11-05",
+  "lamps": {
+    "lamp1": {
+      "onSince": null,
+      "todayMs": 1205115,
+      "switches": 4
+    },
+    "lamp2": {
+      "onSince": null,
+      "todayMs": 1207304,
+      "switches": 4
+    },
+    "lamp3": {
+      "onSince": null,
+      "todayMs": 1197151,
+      "switches": 3
+    }
+  },
+  "autoPhase": null,
+  "autoLastRun": null
+}

@@ -14,7 +14,7 @@ export const FIWARE_HEADERS = {
 };
 
 export const POLL_MS = 1500; // frequência de leitura do Orion
-export const COMMAND_TIMEOUT_MS = 15000; // tempo máximo para o ESP32 confirmar um comando
+export const COMMAND_TIMEOUT_MS = 25000; // tempo máximo para o ESP32 confirmar (servos lentos levam até ~8 s numa cena)
 export const ESP32_OFFLINE_MS = 20000; // sem nenhum dado por esse tempo => ESP32 offline
 
 // Todos os dispositivos ligados ao ESP32

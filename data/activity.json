@@ -1,0 +1,580 @@
+[
+  {
+    "id": "1793924997585-dbqk0",
+    "time": "2026-11-06T00:29:57.585Z",
+    "type": "state",
+    "message": "Janela abriu",
+    "device": "window",
+    "source": "manual"
+  },
+  {
+    "id": "1793924989780-5tgwh",
+    "time": "2026-11-06T00:29:49.780Z",
+    "type": "command",
+    "message": "Você mandou abrir janela",
+    "device": "window",
+    "source": "manual"
+  },
+  {
+    "id": "1793924975074-qnk1y",
+    "time": "2026-11-06T00:29:35.074Z",
+    "type": "state",
+    "message": "Janela fechou",
+    "device": "window",
+    "source": "device"
+  },
+  {
+    "id": "1793924767894-3irk9",
+    "time": "2026-11-06T00:26:07.894Z",
+    "type": "system",
+    "message": "Backend iniciado"
+  },
+  {
+    "id": "1793924685511-b92c5",
+    "time": "2026-11-06T00:24:45.511Z",
+    "type": "state",
+    "message": "Janela abriu",
+    "device": "window",
+    "source": "manual"
+  },
+  {
+    "id": "1793924679636-fluse",
+    "time": "2026-11-06T00:24:39.636Z",
+    "type": "command",
+    "message": "Você mandou abrir janela",
+    "device": "window",
+    "source": "manual"
+  },
+  {
+    "id": "1793924659226-h75j2",
+    "time": "2026-11-06T00:24:19.226Z",
+    "type": "state",
+    "message": "Cozinha apagou",
+    "device": "lamp3",
+    "source": "all"
+  },
+  {
+    "id": "1793924659226-pylgy",
+    "time": "2026-11-06T00:24:19.226Z",
+    "type": "state",
+    "message": "Quarto apagou",
+    "device": "lamp2",
+    "source": "all"
+  },
+  {
+    "id": "1793924659226-yyld4",
+    "time": "2026-11-06T00:24:19.226Z",
+    "type": "state",
+    "message": "Sala apagou",
+    "device": "lamp1",
+    "source": "all"
+  },
+  {
+    "id": "1793924657779-cigb6",
+    "time": "2026-11-06T00:24:17.779Z",
+    "type": "command",
+    "message": "Você apagou todas as luzes"
+  },
+  {
+    "id": "1793924645309-y9nj2",
+    "time": "2026-11-06T00:24:05.309Z",
+    "type": "state",
+    "message": "Cozinha acendeu",
+    "device": "lamp3",
+    "source": "all"
+  },
+  {
+    "id": "1793924645309-8pxqg",
+    "time": "2026-11-06T00:24:05.309Z",
+    "type": "state",
+    "message": "Quarto acendeu",
+    "device": "lamp2",
+    "source": "all"
+  },
+  {
+    "id": "1793924645309-r9k8o",
+    "time": "2026-11-06T00:24:05.309Z",
+    "type": "state",
+    "message": "Sala acendeu",
+    "device": "lamp1",
+    "source": "all"
+  },
+  {
+    "id": "1793924643691-7r6jd",
+    "time": "2026-11-06T00:24:03.691Z",
+    "type": "command",
+    "message": "Você acendeu todas as luzes"
+  },
+  {
+    "id": "1793924222173-iks3w",
+    "time": "2026-11-06T00:17:02.173Z",
+    "type": "state",
+    "message": "Janela fechou",
+    "device": "window",
+    "source": "device"
+  },
+  {
+    "id": "1793923771612-ul8tl",
+    "time": "2026-11-06T00:09:31.612Z",
+    "type": "state",
+    "message": "Janela abriu",
+    "device": "window",
+    "source": "manual"
+  },
+  {
+    "id": "1793923766616-zrrvp",
+    "time": "2026-11-06T00:09:26.616Z",
+    "type": "command",
+    "message": "Você mandou abrir janela",
+    "device": "window",
+    "source": "manual"
+  },
+  {
+    "id": "1793923682342-b6rhg",
+    "time": "2026-11-06T00:08:02.342Z",
+    "type": "state",
+    "message": "Varal foi recolhido",
+    "device": "clothesline",
+    "source": "device"
+  },
+  {
+    "id": "1793923330955-62396",
+    "time": "2026-11-06T00:02:10.955Z",
+    "type": "state",
+    "message": "Quarto apagou",
+    "device": "lamp2",
+    "source": "all"
+  },
+  {
+    "id": "1793923329026-y84au",
+    "time": "2026-11-06T00:02:09.026Z",
+    "type": "command",
+    "message": "Você apagou todas as luzes"
+  },
+  {
+    "id": "1793923320798-7pd0s",
+    "time": "2026-11-06T00:02:00.798Z",
+    "type": "state",
+    "message": "Quarto acendeu",
+    "device": "lamp2",
+    "source": "manual"
+  },
+  {
+    "id": "1793923318389-vs5fw",
+    "time": "2026-11-06T00:01:58.389Z",
+    "type": "command",
+    "message": "Você mandou acender quarto",
+    "device": "lamp2",
+    "source": "manual"
+  },
+  {
+    "id": "1793923312281-2v4u6",
+    "time": "2026-11-06T00:01:52.282Z",
+    "type": "state",
+    "message": "Varal foi estendido",
+    "device": "clothesline",
+    "source": "manual"
+  },
+  {
+    "id": "1793923302228-nfun8",
+    "time": "2026-11-06T00:01:42.228Z",
+    "type": "command",
+    "message": "Você mandou estender varal",
+    "device": "clothesline",
+    "source": "manual"
+  },
+  {
+    "id": "1793923300762-mz0ev",
+    "time": "2026-11-06T00:01:40.762Z",
+    "type": "state",
+    "message": "Varal foi recolhido",
+    "device": "clothesline",
+    "source": "manual"
+  },
+  {
+    "id": "1793923291101-t3huv",
+    "time": "2026-11-06T00:01:31.101Z",
+    "type": "command",
+    "message": "Você mandou recolher varal",
+    "device": "clothesline",
+    "source": "manual"
+  },
+  {
+    "id": "1793923280750-ezv29",
+    "time": "2026-11-06T00:01:20.751Z",
+    "type": "state",
+    "message": "Janela fechou",
+    "device": "window",
+    "source": "manual"
+  },
+  {
+    "id": "1793923275305-6vgg3",
+    "time": "2026-11-06T00:01:15.305Z",
+    "type": "command",
+    "message": "Você mandou fechar janela",
+    "device": "window",
+    "source": "manual"
+  },
+  {
+    "id": "1793923269028-rz5xp",
+    "time": "2026-11-06T00:01:09.028Z",
+    "type": "state",
+    "message": "Janela abriu",
+    "device": "window",
+    "source": "manual"
+  },
+  {
+    "id": "1793923263566-5skl6",
+    "time": "2026-11-06T00:01:03.566Z",
+    "type": "command",
+    "message": "Você mandou abrir janela",
+    "device": "window",
+    "source": "manual"
+  },
+  {
+    "id": "1793923260721-ejxqi",
+    "time": "2026-11-06T00:01:00.721Z",
+    "type": "state",
+    "message": "Janela fechou",
+    "device": "window",
+    "source": "manual"
+  },
+  {
+    "id": "1793923253980-uz8hz",
+    "time": "2026-11-06T00:00:53.980Z",
+    "type": "command",
+    "message": "Você mandou fechar janela",
+    "device": "window",
+    "source": "manual"
+  },
+  {
+    "id": "1793923236204-z0ynk",
+    "time": "2026-11-06T00:00:36.204Z",
+    "type": "state",
+    "message": "Janela abriu",
+    "device": "window",
+    "source": "manual"
+  },
+  {
+    "id": "1793923230539-636bo",
+    "time": "2026-11-06T00:00:30.539Z",
+    "type": "command",
+    "message": "Você mandou abrir janela",
+    "device": "window",
+    "source": "manual"
+  },
+  {
+    "id": "1793923226172-5c7w4",
+    "time": "2026-11-06T00:00:26.172Z",
+    "type": "state",
+    "message": "Janela fechou",
+    "device": "window",
+    "source": "manual"
+  },
+  {
+    "id": "1793923221141-lgfzw",
+    "time": "2026-11-06T00:00:21.141Z",
+    "type": "command",
+    "message": "Você mandou fechar janela",
+    "device": "window",
+    "source": "manual"
+  },
+  {
+    "id": "1793923214395-h6x76",
+    "time": "2026-11-06T00:00:14.395Z",
+    "type": "state",
+    "message": "Cozinha apagou",
+    "device": "lamp3",
+    "source": "all"
+  },
+  {
+    "id": "1793923214395-vz3ap",
+    "time": "2026-11-06T00:00:14.395Z",
+    "type": "state",
+    "message": "Quarto apagou",
+    "device": "lamp2",
+    "source": "all"
+  },
+  {
+    "id": "1793923214395-rwkq2",
+    "time": "2026-11-06T00:00:14.395Z",
+    "type": "state",
+    "message": "Sala apagou",
+    "device": "lamp1",
+    "source": "all"
+  },
+  {
+    "id": "1793923213246-pqy94",
+    "time": "2026-11-06T00:00:13.246Z",
+    "type": "command",
+    "message": "Você apagou todas as luzes"
+  },
+  {
+    "id": "1793922166234-8n1uk",
+    "time": "2026-11-05T23:42:46.234Z",
+    "type": "state",
+    "message": "Janela abriu",
+    "device": "window",
+    "source": "manual"
+  },
+  {
+    "id": "1793922160306-bj8ro",
+    "time": "2026-11-05T23:42:40.306Z",
+    "type": "command",
+    "message": "Você mandou estender varal",
+    "device": "clothesline",
+    "source": "manual"
+  },
+  {
+    "id": "1793922160189-33lj2",
+    "time": "2026-11-05T23:42:40.189Z",
+    "type": "command",
+    "message": "Você mandou abrir janela",
+    "device": "window",
+    "source": "manual"
+  },
+  {
+    "id": "1793922076282-u2nd1",
+    "time": "2026-11-05T23:41:16.282Z",
+    "type": "state",
+    "message": "Janela fechou",
+    "device": "window",
+    "source": "manual"
+  },
+  {
+    "id": "1793922073101-0xa6h",
+    "time": "2026-11-05T23:41:13.101Z",
+    "type": "state",
+    "message": "Varal foi estendido",
+    "device": "clothesline",
+    "source": "manual"
+  },
+  {
+    "id": "1793922069702-das2s",
+    "time": "2026-11-05T23:41:09.702Z",
+    "type": "command",
+    "message": "Você mandou fechar janela",
+    "device": "window",
+    "source": "manual"
+  },
+  {
+    "id": "1793922063903-hobsl",
+    "time": "2026-11-05T23:41:03.903Z",
+    "type": "command",
+    "message": "Você mandou estender varal",
+    "device": "clothesline",
+    "source": "manual"
+  },
+  {
+    "id": "1793922057054-wulqt",
+    "time": "2026-11-05T23:40:57.054Z",
+    "type": "state",
+    "message": "Janela abriu",
+    "device": "window",
+    "source": "manual"
+  },
+  {
+    "id": "1793922051021-uh4m3",
+    "time": "2026-11-05T23:40:51.021Z",
+    "type": "command",
+    "message": "Você mandou abrir janela",
+    "device": "window",
+    "source": "manual"
+  },
+  {
+    "id": "1793922049048-zub0r",
+    "time": "2026-11-05T23:40:49.048Z",
+    "type": "state",
+    "message": "Cozinha acendeu",
+    "device": "lamp3",
+    "source": "manual"
+  },
+  {
+    "id": "1793922047463-s7qoh",
+    "time": "2026-11-05T23:40:47.463Z",
+    "type": "state",
+    "message": "Quarto acendeu",
+    "device": "lamp2",
+    "source": "manual"
+  },
+  {
+    "id": "1793922046743-crz3g",
+    "time": "2026-11-05T23:40:46.743Z",
+    "type": "command",
+    "message": "Você mandou acender cozinha",
+    "device": "lamp3",
+    "source": "manual"
+  },
+  {
+    "id": "1793922045874-c885u",
+    "time": "2026-11-05T23:40:45.874Z",
+    "type": "state",
+    "message": "Sala acendeu",
+    "device": "lamp1",
+    "source": "manual"
+  },
+  {
+    "id": "1793922045647-ho3ux",
+    "time": "2026-11-05T23:40:45.647Z",
+    "type": "command",
+    "message": "Você mandou acender quarto",
+    "device": "lamp2",
+    "source": "manual"
+  },
+  {
+    "id": "1793922044292-wr3qe",
+    "time": "2026-11-05T23:40:44.292Z",
+    "type": "command",
+    "message": "Você mandou acender sala",
+    "device": "lamp1",
+    "source": "manual"
+  },
+  {
+    "id": "1793922042703-19cph",
+    "time": "2026-11-05T23:40:42.703Z",
+    "type": "state",
+    "message": "Cozinha apagou",
+    "device": "lamp3",
+    "source": "manual"
+  },
+  {
+    "id": "1793922041262-qdah1",
+    "time": "2026-11-05T23:40:41.262Z",
+    "type": "command",
+    "message": "Você mandou apagar cozinha",
+    "device": "lamp3",
+    "source": "manual"
+  },
+  {
+    "id": "1793922041114-piqe3",
+    "time": "2026-11-05T23:40:41.114Z",
+    "type": "state",
+    "message": "Quarto apagou",
+    "device": "lamp2",
+    "source": "manual"
+  },
+  {
+    "id": "1793922041113-86g5r",
+    "time": "2026-11-05T23:40:41.113Z",
+    "type": "state",
+    "message": "Sala apagou",
+    "device": "lamp1",
+    "source": "manual"
+  },
+  {
+    "id": "1793922039714-b3r4b",
+    "time": "2026-11-05T23:40:39.714Z",
+    "type": "command",
+    "message": "Você mandou apagar quarto",
+    "device": "lamp2",
+    "source": "manual"
+  },
+  {
+    "id": "1793922037487-phxjk",
+    "time": "2026-11-05T23:40:37.487Z",
+    "type": "command",
+    "message": "Você mandou apagar sala",
+    "device": "lamp1",
+    "source": "manual"
+  },
+  {
+    "id": "1793922024816-405lm",
+    "time": "2026-11-05T23:40:24.816Z",
+    "type": "state",
+    "message": "Cozinha acendeu",
+    "device": "lamp3",
+    "source": "all"
+  },
+  {
+    "id": "1793922024816-omt7a",
+    "time": "2026-11-05T23:40:24.816Z",
+    "type": "state",
+    "message": "Quarto acendeu",
+    "device": "lamp2",
+    "source": "all"
+  },
+  {
+    "id": "1793922024816-7twej",
+    "time": "2026-11-05T23:40:24.816Z",
+    "type": "state",
+    "message": "Sala acendeu",
+    "device": "lamp1",
+    "source": "all"
+  },
+  {
+    "id": "1793922023060-qdxdp",
+    "time": "2026-11-05T23:40:23.060Z",
+    "type": "command",
+    "message": "Você acendeu todas as luzes"
+  },
+  {
+    "id": "1793921978478-w4yt0",
+    "time": "2026-11-05T23:39:38.478Z",
+    "type": "state",
+    "message": "Janela fechou",
+    "device": "window",
+    "source": "manual"
+  },
+  {
+    "id": "1793921976908-ip7y2",
+    "time": "2026-11-05T23:39:36.908Z",
+    "type": "state",
+    "message": "Sala apagou",
+    "device": "lamp1",
+    "source": "manual"
+  },
+  {
+    "id": "1793921975395-4w92b",
+    "time": "2026-11-05T23:39:35.395Z",
+    "type": "command",
+    "message": "Você mandou fechar janela",
+    "device": "window",
+    "source": "manual"
+  },
+  {
+    "id": "1793921975242-o3oxi",
+    "time": "2026-11-05T23:39:35.242Z",
+    "type": "command",
+    "message": "Você mandou apagar sala",
+    "device": "lamp1",
+    "source": "manual"
+  },
+  {
+    "id": "1793921972101-ysn2h",
+    "time": "2026-11-05T23:39:32.101Z",
+    "type": "state",
+    "message": "Janela abriu",
+    "device": "window",
+    "source": "manual"
+  },
+  {
+    "id": "1793921970528-oi24e",
+    "time": "2026-11-05T23:39:30.528Z",
+    "type": "state",
+    "message": "Sala acendeu",
+    "device": "lamp1",
+    "source": "manual"
+  },
+  {
+    "id": "1793921968706-80jzq",
+    "time": "2026-11-05T23:39:28.706Z",
+    "type": "command",
+    "message": "Você mandou abrir janela",
+    "device": "window",
+    "source": "manual"
+  },
+  {
+    "id": "1793921968539-s2zv6",
+    "time": "2026-11-05T23:39:28.539Z",
+    "type": "command",
+    "message": "Você mandou acender sala",
+    "device": "lamp1",
+    "source": "manual"
+  },
+  {
+    "id": "1793921957369-82qh2",
+    "time": "2026-11-05T23:39:17.369Z",
+    "type": "system",
+    "message": "Backend iniciado"
+  }
+]

@@ -6,7 +6,10 @@ import * as house from './house.js';
 import * as fiware from './fiware.js';
 
 const app = express();
-app.use(cors());
+// CORS_ORIGIN: domínio(s) do frontend separados por vírgula (ex.: https://casinha.vercel.app).
+// Sem a variável, aceita qualquer origem (bom para desenvolvimento).
+const corsOrigins = process.env.CORS_ORIGIN?.split(',').map((o) => o.trim().replace(/\/+$/, '')).filter(Boolean);
+app.use(cors(corsOrigins?.length ? { origin: corsOrigins } : undefined));
 app.use(express.json());
 
 // evita repetir try/catch em toda rota

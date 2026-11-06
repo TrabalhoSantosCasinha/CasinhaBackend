@@ -285,9 +285,9 @@ export async function hardwareTest() {
       for (const [key, a, b] of [['window', 'open', 'close'], ['clothesline', 'extend', 'retract']]) {
         const isA = runtime.devices[key]?.state === COMMAND_TARGET[a];
         await command(key, isA ? b : a, 'test');
-        await sleep(4000);
+        await sleep(7000);
         await command(key, isA ? a : b, 'test');
-        await sleep(4000);
+        await sleep(7000);
       }
       log('system', 'Teste de hardware concluído');
     } catch (e) {
