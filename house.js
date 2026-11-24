@@ -2,7 +2,7 @@
 // controla comandos pendentes, conta o tempo de uso das luzes e roda a automação.
 import {
   DEVICES, LAMP_KEYS, ACTUATOR_KEYS, COMMAND_TARGET, COMMAND_VERB, SCENES, DEFAULT_SETTINGS,
-  POLL_MS, COMMAND_TIMEOUT_MS, ESP32_OFFLINE_MS,
+  POLL_MS, COMMAND_TIMEOUT_MS, ESP32_OFFLINE_MS, RAIN_SCENE_ID,
 } from './config.js';
 import * as fiware from './fiware.js';
 import { HttpError, isOffline } from './fiware.js';
@@ -39,6 +39,8 @@ const runtime = {
   pending: {}, // key -> { command, target, since, source }
   memHistory: [], // fallback do STH-Comet
   auto: { darkCount: 0, brightCount: 0 },
+  // raining: true/false depois de confirmado; null enquanto não há leitura
+  rain: { raining: null, raw: null, updatedAt: null, since: null, wetCount: 0, dryCount: 0, lastRun: null },
 };
 
 /* ------------------------------------------------------------------ */
@@ -131,6 +133,16 @@ async function poll() {
       if (runtime.memHistory.length > MAX_MEM_HISTORY) runtime.memHistory.shift();
       evaluateAutomation(value);
     }
+  }
+
+  // Chuva (1 = molhado, 0 = seco)
+  const rainEntity = byId[DEVICES.rain.entityId];
+  const rainRaw = rainEntity?.raining?.value;
+  const rainTime = attrTime(rainEntity, 'raining');
+  if (rainRaw !== undefined && rainRaw !== null && rainRaw !== '' && rainTime && rainTime !== runtime.rain.updatedAt) {
+    runtime.rain.updatedAt = rainTime;
+    runtime.rain.raw = Number(rainRaw) === 1;
+    evaluateRain(runtime.rain.raw);
   }
 
   // Atuadores
@@ -327,13 +339,51 @@ function evaluateAutomation(value) {
   stats.autoLastRun = new Date().toISOString();
   save('stats.json', stats);
 
-  const actions = Object.entries(a[phase]);
+  // com chuva, a automação de luz nunca abre a janela nem estende o varal
+  const actions = Object.entries(a[phase]).filter(([key, cmd]) =>
+    !(runtime.rain.raining && ((key === 'window' && cmd === 'open') || (key === 'clothesline' && cmd === 'extend'))));
   applyActions(actions, 'automation')
     .then((sent) => {
       const label = phase === 'dark' ? `Escureceu (${value}%)` : `Clareou (${value}%)`;
       log('automation', sent.length ? `${label}: ${sent.join(', ')}` : `${label}: nada precisou mudar`, { phase });
     })
     .catch((e) => log('error', `Automação falhou: ${e.message}`));
+}
+
+/* ------------------------------------------------------------------ */
+/* Proteção contra chuva                                                */
+/* ------------------------------------------------------------------ */
+
+function evaluateRain(wet) {
+  const r = runtime.rain;
+  if (wet) {
+    r.wetCount += 1;
+    r.dryCount = 0;
+  } else {
+    r.dryCount += 1;
+    r.wetCount = 0;
+  }
+  const need = settings.rain.confirmSamples;
+  let next = r.raining;
+  if (r.wetCount >= need) next = true;
+  if (r.dryCount >= need) next = false;
+  if (next === r.raining) return;
+
+  const first = r.raining === null;
+  r.raining = next;
+  r.since = new Date().toISOString();
+  if (!first || next) log('state', next ? '🌧️ Começou a chover' : '☀️ Parou de chover', { device: 'rain', source: 'device' });
+  if (!next || !settings.rain.enabled) return;
+
+  const scene = SCENES.find((s) => s.id === RAIN_SCENE_ID);
+  r.lastRun = new Date().toISOString();
+  applyActions(scene.actions, 'automation')
+    .then((sent) => {
+      log('automation', sent.length
+        ? `Chuva detectada: ${sent.join(', ')}`
+        : 'Chuva detectada: janela e varal já estavam protegidos', { phase: 'rain' });
+    })
+    .catch((e) => log('error', `Proteção contra chuva falhou: ${e.message}`));
 }
 
 /* ------------------------------------------------------------------ */
@@ -378,6 +428,15 @@ function mergeSettings(base, patch) {
       throw new HttpError(400, 'O limite de "escuro" precisa ser menor que o de "claro"');
     }
   }
+  const pr = patch?.rain;
+  if (pr) {
+    if (typeof pr.enabled === 'boolean') base.rain.enabled = pr.enabled;
+    if (pr.confirmSamples !== undefined) {
+      const n = Math.round(Number(pr.confirmSamples));
+      if (Number.isNaN(n) || n < 1 || n > 10) throw new HttpError(400, 'Leituras de confirmação da chuva: entre 1 e 10');
+      base.rain.confirmSamples = n;
+    }
+  }
   return base;
 }
 
@@ -399,6 +458,9 @@ export function updateSettings(patch) {
     save('stats.json', stats);
     if (wasEnabled !== nowEnabled) log('system', nowEnabled ? 'Automação ativada' : 'Automação desativada');
     else log('system', 'Regras da automação atualizadas');
+  }
+  if (patch?.rain && typeof patch.rain.enabled === 'boolean') {
+    log('system', settings.rain.enabled ? 'Proteção contra chuva ativada' : 'Proteção contra chuva desativada');
   }
   if (patch?.lampNames) log('system', 'Nomes das luzes atualizados');
   return settings;
@@ -435,6 +497,14 @@ export function getStatus() {
       lastSeen: runtime.lastSeen,
     },
     luminosity: runtime.luminosity,
+    rain: {
+      raining: runtime.rain.raining,
+      wet: runtime.rain.raw,
+      since: runtime.rain.since,
+      updatedAt: runtime.rain.updatedAt,
+      lastRun: runtime.rain.lastRun,
+      protectionEnabled: settings.rain.enabled,
+    },
     lamps: LAMP_KEYS.map((k, i) => ({ ...actuator(k), number: i + 1, ...lampUsage(k) })),
     window: actuator('window'),
     clothesline: actuator('clothesline'),

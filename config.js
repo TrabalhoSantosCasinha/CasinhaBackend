@@ -25,9 +25,19 @@ export const DEVICES = {
     entityId: 'urn:ngsi-ld:LuminositySensor:001',
     type: 'LuminositySensor',
     label: 'Sensor de luminosidade',
-    hardware: 'LDR + resistor 10 kΩ',
-    pin: 'GPIO 34',
+    hardware: 'Módulo LDR (saída digital)',
+    pin: 'GPIO 32',
     attrs: [{ objectId: 'l', name: 'luminosity', example: 'l|73' }],
+  },
+  rain: {
+    key: 'rain',
+    deviceId: 'rain001',
+    entityId: 'urn:ngsi-ld:RainSensor:001',
+    type: 'RainSensor',
+    label: 'Sensor de chuva',
+    hardware: 'FC-37 + módulo YL-38',
+    pin: 'GPIO 35',
+    attrs: [{ objectId: 'r', name: 'raining', example: 'r|1' }],
   },
   lamp1: {
     key: 'lamp1',
@@ -152,4 +162,11 @@ export const DEFAULT_SETTINGS = {
     dark: { lamp1: 'on', lamp2: 'none', lamp3: 'on', window: 'close', clothesline: 'retract' },
     bright: { lamp1: 'off', lamp2: 'off', lamp3: 'off', window: 'none', clothesline: 'none' },
   },
+  // Proteção contra chuva: começou a chover => roda a cena "Vai chover"
+  rain: {
+    enabled: true,
+    confirmSamples: 2, // leituras seguidas "molhado" antes de agir (evita respingo isolado)
+  },
 };
+
+export const RAIN_SCENE_ID = 'vai-chover';
