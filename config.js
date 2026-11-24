@@ -167,6 +167,18 @@ export const DEFAULT_SETTINGS = {
     enabled: true,
     confirmSamples: 2, // leituras seguidas "molhado" antes de agir (evita respingo isolado)
   },
+  // Previsão do tempo (Open-Meteo): chance de chuva alta nas próximas horas => roda "Vai chover" antes
+  forecast: {
+    enabled: true,
+    city: 'São Paulo',
+    region: 'São Paulo, Brasil',
+    latitude: -23.55,
+    longitude: -46.63,
+    threshold: 70, // % de chance de chuva
+    hoursAhead: 2, // olhar as próximas N horas
+  },
 };
+
+export const WEATHER_POLL_MS = 10 * 60 * 1000; // a previsão muda devagar: 10 min é suficiente
 
 export const RAIN_SCENE_ID = 'vai-chover';

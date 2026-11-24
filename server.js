@@ -57,6 +57,11 @@ app.put('/api/settings', route(async (req, res) => {
   res.json(house.updateSettings(req.body));
 }));
 
+/* -------- Previsão do tempo -------- */
+app.get('/api/forecast/cities', route(async (req, res) => {
+  res.json(await house.searchCities(String(req.query.q ?? '')));
+}));
+
 /* -------- Atividade -------- */
 app.get('/api/activity', (req, res) => res.json(house.getActivity(req.query)));
 app.delete('/api/activity', (_req, res) => {

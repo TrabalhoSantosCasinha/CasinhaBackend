@@ -2,9 +2,10 @@
 // controla comandos pendentes, conta o tempo de uso das luzes e roda a automação.
 import {
   DEVICES, LAMP_KEYS, ACTUATOR_KEYS, COMMAND_TARGET, COMMAND_VERB, SCENES, DEFAULT_SETTINGS,
-  POLL_MS, COMMAND_TIMEOUT_MS, ESP32_OFFLINE_MS, RAIN_SCENE_ID,
+  POLL_MS, COMMAND_TIMEOUT_MS, ESP32_OFFLINE_MS, RAIN_SCENE_ID, WEATHER_POLL_MS,
 } from './config.js';
 import * as fiware from './fiware.js';
+import * as weather from './weather.js';
 import { HttpError, isOffline } from './fiware.js';
 import { load, save } from './store.js';
 
@@ -41,7 +42,12 @@ const runtime = {
   auto: { darkCount: 0, brightCount: 0 },
   // raining: true/false depois de confirmado; null enquanto não há leitura
   rain: { raining: null, raw: null, updatedAt: null, since: null, wetCount: 0, dryCount: 0, lastRun: null },
+  // previsão da Open-Meteo; alert = chance de chuva >= limite nas próximas horas
+  forecast: { data: null, fetchedAt: null, error: null, alert: false, maxProb: null, nextRainAt: null, lastRun: null },
 };
+
+// a casa deve ficar protegida (sem abrir janela / estender varal pela automação de luz)
+const rainExpected = () => runtime.rain.raining === true || runtime.forecast.alert;
 
 /* ------------------------------------------------------------------ */
 /* Utilidades                                                           */
@@ -339,9 +345,9 @@ function evaluateAutomation(value) {
   stats.autoLastRun = new Date().toISOString();
   save('stats.json', stats);
 
-  // com chuva, a automação de luz nunca abre a janela nem estende o varal
+  // com chuva (ou previsão de chuva), a automação de luz nunca abre a janela nem estende o varal
   const actions = Object.entries(a[phase]).filter(([key, cmd]) =>
-    !(runtime.rain.raining && ((key === 'window' && cmd === 'open') || (key === 'clothesline' && cmd === 'extend'))));
+    !(rainExpected() && ((key === 'window' && cmd === 'open') || (key === 'clothesline' && cmd === 'extend'))));
   applyActions(actions, 'automation')
     .then((sent) => {
       const label = phase === 'dark' ? `Escureceu (${value}%)` : `Clareou (${value}%)`;
@@ -384,6 +390,60 @@ function evaluateRain(wet) {
         : 'Chuva detectada: janela e varal já estavam protegidos', { phase: 'rain' });
     })
     .catch((e) => log('error', `Proteção contra chuva falhou: ${e.message}`));
+}
+
+/* ------------------------------------------------------------------ */
+/* Previsão do tempo (Open-Meteo)                                       */
+/* ------------------------------------------------------------------ */
+
+// Recalcula o alerta com a previsão já baixada (ex.: depois de mudar o limite)
+function evaluateForecast() {
+  const f = runtime.forecast;
+  const cfg = settings.forecast;
+  const wasAlert = f.alert;
+  const upcoming = (f.data?.hourly ?? []).slice(0, cfg.hoursAhead);
+  const probs = upcoming.map((h) => h.probability).filter((p) => typeof p === 'number');
+  f.maxProb = probs.length ? Math.max(...probs) : null;
+  const next = upcoming.find((h) => typeof h.probability === 'number' && h.probability >= cfg.threshold);
+  f.nextRainAt = next?.time ?? null;
+  f.alert = cfg.enabled && !!next;
+
+  if (f.alert === wasAlert) return;
+  if (!f.alert) {
+    log('system', 'A previsão de chuva para as próximas horas baixou');
+    return;
+  }
+  const hour = next.time.slice(11, 16);
+  f.lastRun = new Date().toISOString();
+  const scene = SCENES.find((s) => s.id === RAIN_SCENE_ID);
+  applyActions(scene.actions, 'automation')
+    .then((sent) => {
+      const label = `Previsão: ${next.probability}% de chance de chuva às ${hour} (${cfg.city})`;
+      log('automation', sent.length ? `${label}: ${sent.join(', ')}` : `${label}: janela e varal já estavam protegidos`, {
+        phase: 'forecast',
+      });
+    })
+    .catch((e) => log('error', `Proteção pela previsão falhou: ${e.message}`));
+}
+
+async function refreshForecast() {
+  const f = runtime.forecast;
+  const cfg = settings.forecast;
+  try {
+    f.data = await weather.getForecast(cfg.latitude, cfg.longitude, 12);
+    f.fetchedAt = new Date().toISOString();
+    if (f.error) log('system', 'Previsão do tempo voltou a responder');
+    f.error = null;
+  } catch (e) {
+    if (!f.error) log('error', `Não foi possível baixar a previsão do tempo: ${e.message}`);
+    f.error = e.message;
+  }
+  evaluateForecast();
+}
+
+export function searchCities(q) {
+  if (!q || q.trim().length < 2) throw new HttpError(400, 'Digite pelo menos 2 letras');
+  return weather.searchCities(q.trim());
 }
 
 /* ------------------------------------------------------------------ */
@@ -437,6 +497,30 @@ function mergeSettings(base, patch) {
       base.rain.confirmSamples = n;
     }
   }
+  const pf = patch?.forecast;
+  if (pf) {
+    const f = base.forecast;
+    if (typeof pf.enabled === 'boolean') f.enabled = pf.enabled;
+    if (pf.threshold !== undefined) {
+      const n = Math.round(Number(pf.threshold));
+      if (Number.isNaN(n) || n < 10 || n > 100) throw new HttpError(400, 'Limite da previsão: entre 10% e 100%');
+      f.threshold = n;
+    }
+    if (pf.hoursAhead !== undefined) {
+      const n = Math.round(Number(pf.hoursAhead));
+      if (Number.isNaN(n) || n < 1 || n > 12) throw new HttpError(400, 'Horas de antecedência: entre 1 e 12');
+      f.hoursAhead = n;
+    }
+    if (pf.latitude !== undefined || pf.longitude !== undefined) {
+      const lat = Number(pf.latitude);
+      const lon = Number(pf.longitude);
+      if (!(lat >= -90 && lat <= 90 && lon >= -180 && lon <= 180)) throw new HttpError(400, 'Cidade inválida');
+      f.latitude = lat;
+      f.longitude = lon;
+      f.city = String(pf.city ?? '').trim().slice(0, 60) || 'Cidade escolhida';
+      f.region = String(pf.region ?? '').trim().slice(0, 80);
+    }
+  }
   return base;
 }
 
@@ -461,6 +545,16 @@ export function updateSettings(patch) {
   }
   if (patch?.rain && typeof patch.rain.enabled === 'boolean') {
     log('system', settings.rain.enabled ? 'Proteção contra chuva ativada' : 'Proteção contra chuva desativada');
+  }
+  if (patch?.forecast) {
+    const pf = patch.forecast;
+    if (typeof pf.enabled === 'boolean') {
+      log('system', settings.forecast.enabled ? 'Proteção pela previsão do tempo ativada' : 'Proteção pela previsão do tempo desativada');
+    } else {
+      log('system', `Previsão do tempo: ${settings.forecast.city}, ${settings.forecast.threshold}% em até ${settings.forecast.hoursAhead} h`);
+    }
+    if (pf.latitude !== undefined) refreshForecast(); // cidade nova: baixa de novo
+    else evaluateForecast();
   }
   if (patch?.lampNames) log('system', 'Nomes das luzes atualizados');
   return settings;
@@ -504,6 +598,17 @@ export function getStatus() {
       updatedAt: runtime.rain.updatedAt,
       lastRun: runtime.rain.lastRun,
       protectionEnabled: settings.rain.enabled,
+    },
+    forecast: {
+      ...settings.forecast,
+      alert: runtime.forecast.alert,
+      maxProb: runtime.forecast.maxProb,
+      nextRainAt: runtime.forecast.nextRainAt,
+      lastRun: runtime.forecast.lastRun,
+      fetchedAt: runtime.forecast.fetchedAt,
+      error: runtime.forecast.error,
+      current: runtime.forecast.data?.current ?? null,
+      hourly: runtime.forecast.data?.hourly ?? [],
     },
     lamps: LAMP_KEYS.map((k, i) => ({ ...actuator(k), number: i + 1, ...lampUsage(k) })),
     window: actuator('window'),
@@ -561,4 +666,6 @@ export function start() {
     }
   };
   tick();
+  setTimeout(refreshForecast, 5000); // espera o primeiro estado do Orion antes de agir
+  setInterval(refreshForecast, WEATHER_POLL_MS);
 }
